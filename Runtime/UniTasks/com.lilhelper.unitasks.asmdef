@@ -1,0 +1,9 @@
+{
+  "name": "com.lilhelper.unitasks",
+  "references": [
+    "UniTask"
+  ],
+  "defineConstraints": [
+    "UNITASK"
+  ]
+}
