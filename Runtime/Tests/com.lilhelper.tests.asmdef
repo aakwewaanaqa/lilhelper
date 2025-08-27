@@ -1,0 +1,14 @@
+{
+    "name": "com.lilhelper.tests",
+    "references": [
+        "com.lilhelper",
+        "UnityEditor.TestRunner",
+        "UnityEngine.TestRunner"
+    ],
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ]
+}
