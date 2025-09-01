@@ -1,0 +1,9 @@
+{
+  "name": "com.lilhelper.editors",
+  "references": [
+    "com.lilhelper"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ]
+}

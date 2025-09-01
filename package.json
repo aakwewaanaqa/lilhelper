@@ -1,17 +1,17 @@
 {
-    "name": "com.lilhelper",
-    "displayName": "Little Helper",
-    "author": {
-        "name": "ponito",
-        "email": "vvbdac58@gmail.com"
-    },
-    "descpription": "A helper package for Unity",
-    "version": "1.0.0",
-    "unity": "2021.3",
-    "unityRelease": "8f1",
-    "description": "",
-    "dependencies": {
-        "com.unity.nuget.newtonsoft-json": "1.0.0"
-    },
-    "type": "Library"
+  "name": "com.lilhelper",
+  "displayName": "Little Helper",
+  "author": {
+    "name": "ponito",
+    "email": "vvbdac58@gmail.com"
+  },
+  "descpription": "A helper package for Unity",
+  "version": "1.0.0",
+  "unity": "2021.3",
+  "unityRelease": "8f1",
+  "description": "A package for helping functionalities...",
+  "dependencies": {
+    "com.unity.nuget.newtonsoft-json": "1.0.0"
+  },
+  "type": "Library"
 }

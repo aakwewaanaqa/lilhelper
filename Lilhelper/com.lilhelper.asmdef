@@ -1,3 +1,6 @@
 {
-  "name": "com.lilhelper"
+  "name": "com.lilhelper",
+  "references": [
+    "UniTask"
+  ]
 }
