@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -26,12 +27,13 @@ namespace Lilhelper.Objs {
             return self;
         }
 
-        public static GameObject EnsureComp<T>(this GameObject self, Func<T, UniTask> apply) where T : Component {
+        public static GameObject EnsureComp<T>(this GameObject self, Func<T, IEnumerator> apply) where T : MonoBehaviour {
             var comp                = self.GetComponent<T>();
             if (comp.IsNull()) comp = self.AddComponent<T>();
-            apply?.Invoke(comp);
+            if (apply.IsExists()) comp.StartCoroutine(apply(comp));
             return self;
         }
+
 
         public static Transform EnsureComp<T>(this Transform self) where T : Component {
             var comp                = self.GetComponent<T>();
