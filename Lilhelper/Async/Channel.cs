@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Ct = System.Threading.CancellationToken;
 
 namespace Lilhelper.Async {
-    public class Channel<T> : IDisposable {
+    public class Channel<T> : IDisposable, IEnumerable<T> {
         private readonly IList<T> values = new List<T>();
         public readonly  Ctx      ctx;
 
@@ -40,6 +40,19 @@ namespace Lilhelper.Async {
                     disposable.Dispose();
                 }
             }
+        }
+
+        public IEnumerator<T> GetEnumerator() {
+            while (values.Count < 0) { }
+
+            while (values.Count > 0) {
+                yield return values[0];
+                values.RemoveAt(0);
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() {
+            return GetEnumerator();
         }
     }
 }
