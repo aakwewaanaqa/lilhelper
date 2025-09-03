@@ -8,6 +8,8 @@ namespace Lilhelper.Debugs {
 
         public static Color32 MethodColor { get; set; } = new Color32(0xDC, 0xDC, 0xAA, 0xFF);
 
+        private static Color32 ExceptionColor { get; set; } = new Color32(0xFF, 0x44, 0x44, 0xFF);
+
         private static string ToHash(this Color32 color) {
             return $"#{color.r:X2}{color.g:X2}{color.b:X2}{color.a:X2}";
         }
@@ -18,6 +20,11 @@ namespace Lilhelper.Debugs {
 
         private static string MethodLog(this string txt) {
             return $"<color={MethodColor.ToHash()}>{txt}</color>";
+        }
+
+        private static string ExceptionLog(this Exception ex) {
+            if (ex is null) return "";
+            return $"<b><color={ExceptionColor.ToHash()}>{ex.GetType()} : {ex.Message}</color></b>";
         }
 
         public static void F(this Type self, string methodName, params object[] args) {
@@ -39,6 +46,23 @@ namespace Lilhelper.Debugs {
 
             msg.Append(");");
             Debug.Log(msg.ToString());
+        }
+
+        public static void FuncThrow(this Type self, string methodName, Exception ex = null) {
+            var msg = new StringBuilder($"{self.Name.TypeLog()}.{methodName.MethodLog()}(");
+            if (ex is null) {
+                msg.Append(");");
+                Debug.Log(msg.ToString());
+                return;
+            }
+
+            string pad = new(' ', $"{self.Name}.{methodName}(".Length);
+            msg.AppendLine()
+               .Append(pad)
+               .Append(ExceptionLog(ex))
+               .Append(");");
+            Debug.Log(msg.ToString());
+            throw ex;
         }
     }
 }

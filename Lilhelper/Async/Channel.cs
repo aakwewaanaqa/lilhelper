@@ -25,7 +25,7 @@ namespace Lilhelper.Async {
         }
 
         public T Read() {
-            while (values.Count < 0) { }
+            while (values.Count <= 0) { }
 
             var val = values[^1];
             values.RemoveAt(values.Count - 1);
@@ -43,7 +43,7 @@ namespace Lilhelper.Async {
         }
 
         public IEnumerator<T> GetEnumerator() {
-            while (values.Count < 0) { }
+            while (values.Count <= 0) { }
 
             while (values.Count > 0) {
                 yield return values[0];
