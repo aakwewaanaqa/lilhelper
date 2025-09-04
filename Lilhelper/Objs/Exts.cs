@@ -27,7 +27,8 @@ namespace Lilhelper.Objs {
             return self;
         }
 
-        public static GameObject EnsureComp<T>(this GameObject self, Func<T, IEnumerator> apply) where T : MonoBehaviour {
+        public static GameObject EnsureComp<T>(this GameObject self, Func<T, IEnumerator> apply)
+            where T : MonoBehaviour {
             var comp                = self.GetComponent<T>();
             if (comp.IsNull()) comp = self.AddComponent<T>();
             if (apply.IsExists()) comp.StartCoroutine(apply(comp));
@@ -63,6 +64,15 @@ namespace Lilhelper.Objs {
 
         public static GameObject Instantiate(this GameObject self) {
             return GameObject.Instantiate(self);
+        }
+
+        public static GameObject Instantiate(this GameObject self, Transform parent) {
+            return GameObject.Instantiate(self, parent);
+        }
+
+        public static T Out<T>(this T self, out T t) {
+            t = self;
+            return self;
         }
     }
 }
