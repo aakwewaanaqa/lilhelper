@@ -8,7 +8,7 @@ namespace Lilhelper.Parsing.Tokens {
         public int Length => dimension.Length;
 
         public override string ToString() {
-            return $"{content.ToString()}({dimension.ToString()})";
+            return $"{content}({dimension.ToString()})";
         }
     }
 }

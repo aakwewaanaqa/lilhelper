@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using Lilhelper.Async;
 
@@ -17,14 +18,11 @@ namespace Lilhelper.Parsing.Tokens {
         public static TokenPipe Any0(this TokenPipe a, string errTag = "") => self => {
             var pos = self.Pos;
             var ofA = a(self);
-            if (ofA.IsErr) return ofA;
+            if (ofA.IsOk) return ofA;
             return new TokenResult {
                 token = new Token {
-                    content = ofA.token.content,
-                    dimension = new TokenDim {
-                        start = pos,
-                        end   = self.Pos
-                    }
+                    content   = string.Empty,
+                    dimension = pos.NoLength
                 }
             };
         };
@@ -34,7 +32,8 @@ namespace Lilhelper.Parsing.Tokens {
             var start   = self.Pos;
             for (;;) {
                 var ofA = a(self);
-                if (!ofA.IsOk) break;
+                if (ofA.IsErr) break;
+                if (ofA.IsNone) break;
                 builder.Append(ofA.token.content);
             }
 
@@ -50,10 +49,10 @@ namespace Lilhelper.Parsing.Tokens {
         };
 
         public static TokenPipe Many1(this TokenPipe a, string supposed = "") => self => {
-            var pos = self.Pos;
+            var pos       = self.Pos;
             var pipeMany0 = a.Many0();
             var ofMany0   = pipeMany0(self);
-            if (ofMany0.IsNone) 
+            if (ofMany0.IsNone)
                 return Error.ExpectationFail(supposed, pos);
             return ofMany0;
         };

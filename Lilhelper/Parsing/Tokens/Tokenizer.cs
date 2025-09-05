@@ -5,16 +5,19 @@ namespace Lilhelper.Parsing.Tokens {
         private readonly ReadOnlySpan<char> src;
         private          TokenPos           pos;
 
-        public TokenPos Pos => pos;
+        public TokenPos Pos {
+            readonly get => pos.Clone();
+            private set => pos = value;
+        }
 
         public bool IsEof() =>
-            pos.Pos < 0
-         || pos.Pos >= src.Length;
+            Pos.Pos < 0
+         || Pos.Pos >= src.Length;
 
         public bool IsEof(int count) =>
-            pos.Pos         < 0
-         || pos.Pos         >= src.Length
-         || pos.Pos + count >= src.Length;
+            Pos.Pos         < 0
+         || Pos.Pos         >= src.Length
+         || Pos.Pos + count >= src.Length;
 
 
         public Tokenizer(string src) {
@@ -27,47 +30,46 @@ namespace Lilhelper.Parsing.Tokens {
 
             if (IsEof()) return false;
 
-            c = src[pos.Pos];
+            c = src[Pos.Pos];
             return true;
         }
 
         public bool TryPeek(int count, out ReadOnlySpan<char> head) {
             head = string.Empty;
             if (IsEof(count)) return false;
-            head = src.Slice(pos.Pos, count);
+            head = src.Slice(Pos.Pos, count);
             return true;
         }
 
-        private TokenPos Alter(TokenPos it) {
-            if (!TryHead(out char head)) return it;
+        private void AlterPos() {
+            if (!TryHead(out char head)) return;
 
             if (head is '\n' or '\r') {
-                it.Pos++;
-                it.Line++;
-                it.Column = 1;
-                return it;
+                pos.Pos++;
+                pos.Line++;
+                pos.Column = 1;
+                return;
             }
 
-            it.Pos++;
-            it.Column++;
-            return it;
+            pos.Pos++;
+            pos.Column++;
         }
 
         public TokenDim Advance() {
-            var start = pos;
-            pos = Alter(pos);
+            var start = Pos;
+            AlterPos();
             return new TokenDim {
                 start = start,
-                end   = pos
+                end   = Pos
             };
         }
 
         public TokenDim Advance(int count) {
-            var dim = pos.CurrentNoLength();
+            var dim = Pos.NoLength;
             for (int i = 0; i < count; i++) {
-                dim.end = Alter(dim.end);
+                AlterPos();
             }
-
+            dim.end = Pos;
             return dim;
         }
     }

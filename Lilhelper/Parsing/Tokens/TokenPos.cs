@@ -1,21 +1,27 @@
 namespace Lilhelper.Parsing.Tokens {
-    public struct TokenPos : IPosition {
+    public class TokenPos : IPosition {
         public int Pos { get; set; }
 
         public int Line { get; set; }
 
         public int Column { get; set; }
 
+        public TokenPos Clone() =>
+            new() {
+                Pos    = Pos,
+                Line   = Line,
+                Column = Column,
+            };
+
         public override string ToString() {
             return $"{Line}:{Column}";
         }
 
-        public TokenDim CurrentNoLength() {
-            return new TokenDim {
+        public TokenDim NoLength =>
+            new() {
                 start = this,
                 end   = this
             };
-        }
 
         public static TokenPos New() {
             return new TokenPos {
