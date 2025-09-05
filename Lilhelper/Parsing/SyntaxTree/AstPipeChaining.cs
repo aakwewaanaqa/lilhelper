@@ -12,8 +12,8 @@ namespace Lilhelper.Parsing.SyntaxTree {
             var pos = self.Tokenizer.Pos;
             var ofA = a(self);
             if (ofA.IsErr)
-                return AstResult.Err(
-                    $"Supposed to parsed {supposed} on then() but fail",
+                return Error.ExpectationFail(
+                    $"{supposed} on then()",
                     pos,
                     ofA.err
                 );
@@ -21,7 +21,6 @@ namespace Lilhelper.Parsing.SyntaxTree {
         };
 
         public static AstPipe Any0(this AstPipe a) => self => {
-            var pos = self.Tokenizer.Pos;
             var ofA = a(self);
             if (ofA.IsErr) return AstResult.Ok(null);
             return AstResult.Ok(ofA.node);
@@ -38,8 +37,8 @@ namespace Lilhelper.Parsing.SyntaxTree {
             var pos = self.Tokenizer.Pos;
             var ofA = a(self.Tokenizer);
             if (ofA.IsErr)
-                return AstResult.Err(
-                    $"Supposed to parsed {supposed} asAst() but fail",
+                return Error.ExpectationFail(
+                    $"{supposed} on then()",
                     pos,
                     ofA.err
                 );

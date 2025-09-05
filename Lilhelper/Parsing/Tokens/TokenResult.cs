@@ -3,9 +3,9 @@ namespace Lilhelper.Parsing.Tokens {
         public Token token;
         public Error err;
 
-        public static TokenResult Err(string msg, IPosition pos, Error inner = null) {
+        public static TokenResult Err(Error outer, Error inner = null) {
             return new TokenResult {
-                err = new Error(msg, pos, inner)
+                err = outer.SetInner(inner)
             };
         }
 
@@ -18,5 +18,7 @@ namespace Lilhelper.Parsing.Tokens {
         public static implicit operator TokenResult(Token token) => new() {
             token = token
         };
+        
+        public static implicit operator TokenResult(Error err) => Err(err);
     }
 }

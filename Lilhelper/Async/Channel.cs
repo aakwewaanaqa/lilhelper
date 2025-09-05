@@ -5,32 +5,31 @@ using System.Collections.Generic;
 namespace Lilhelper.Async {
     public class Channel<T> : IEnumerable<T>, IWriteChannel<T>, IReadChannel<T>, IDisposable {
         private readonly IList<T> values = new List<T>();
-        private readonly Ctx      ctx;
         private readonly bool     isSelfCtx;
 
-        public Ctx Ctx => ctx;
+        public Ctx Ctx { get; }
 
         public Channel(Ctx ctx) {
             if (ctx is null) {
-                this.ctx = new Ctx();
+                this.Ctx = new Ctx();
                 isSelfCtx = true;
             } else {
                 ctx.ThrowIfCancel();
-                this.ctx = ctx;
+                this.Ctx = ctx;
                 isSelfCtx = false;
             }
         }
 
         public void Write(T val) {
-            ctx?.ThrowIfCancel();
+            Ctx?.ThrowIfCancel();
             values.Add(val);
         }
 
         public IEnumerator Read(Action<T> onVal) {
-            ctx?.ThrowIfCancel();
+            Ctx?.ThrowIfCancel();
 
             while (values.Count <= 0) {
-                ctx?.ThrowIfCancel();
+                Ctx?.ThrowIfCancel();
                 yield return null;
             }
 
@@ -39,17 +38,19 @@ namespace Lilhelper.Async {
             onVal?.Invoke(val);
         }
 
-        public bool TryRead(out T result) {
-            ctx?.ThrowIfCancel();
-            var val = values[^1];
+        public bool TryRead(Action<T> onVal) {
+            Ctx?.ThrowIfCancel();
+            if (values.Count <= 0) return false;
+            
             values.RemoveAt(values.Count - 1);
-            return val;
+            onVal?.Invoke(values[^1]);
+            return true;
         }
 
         public void Dispose() {
             if (isSelfCtx) {
-                ctx?.Cancel();
-                ctx?.Dispose();
+                Ctx?.Cancel();
+                Ctx?.Dispose();
             }
 
             foreach (var val in values) {
@@ -60,10 +61,10 @@ namespace Lilhelper.Async {
         }
 
         public IEnumerator<T> GetEnumerator() {
-            ctx?.ThrowIfCancel();
+            Ctx?.ThrowIfCancel();
 
             while (values.Count > 0) {
-                ctx?.ThrowIfCancel();
+                Ctx?.ThrowIfCancel();
                 yield return values[0];
                 values.RemoveAt(0);
             }

@@ -49,10 +49,12 @@ namespace Lilhelper.Parsing.Tokens {
             };
         };
 
-        public static TokenPipe Many1(this TokenPipe a, string errTag = "") => self => {
+        public static TokenPipe Many1(this TokenPipe a, string supposed = "") => self => {
+            var pos = self.Pos;
             var pipeMany0 = a.Many0();
             var ofMany0   = pipeMany0(self);
-            if (ofMany0.IsNone) return TokenResult.Err($"Expected at least one {errTag}", self.Pos);
+            if (ofMany0.IsNone) 
+                return Error.ExpectationFail(supposed, pos);
             return ofMany0;
         };
 

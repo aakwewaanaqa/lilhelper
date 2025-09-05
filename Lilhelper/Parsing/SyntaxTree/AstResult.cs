@@ -3,9 +3,9 @@ namespace Lilhelper.Parsing.SyntaxTree {
         public IAstNode node;
         public Error    err;
 
-        public static AstResult Err(string msg, IPosition pos, Error inner = null) {
+        public static AstResult Err(Error outer, Error inner = null) {
             return new AstResult {
-                err = new Error(msg, pos, inner)
+                err = outer.SetInner(inner)
             };
         }
 
@@ -16,5 +16,7 @@ namespace Lilhelper.Parsing.SyntaxTree {
         public bool IsErr => err is not null;
 
         public bool IsOk => err is null;
+        
+        public static implicit operator AstResult(Error err) => Err(err);
     }
 }
