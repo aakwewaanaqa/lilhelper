@@ -14,59 +14,56 @@ namespace Lilhelper.Objs {
             return self is not null && !self.Equals(null);
         }
 
-        public static GameObject EnsureComp<T>(this GameObject self) where T : Component {
-            var comp = self.GetComponent<T>();
-            if (comp.IsNull()) self.AddComponent<T>();
+        public static GameObject EnsureComp<T>(this GameObject self, out T o) where T : Component {
+            o = self.GetComponent<T>();
+            if (o.IsNull()) o = self.AddComponent<T>();
             return self;
         }
 
-        public static GameObject EnsureComp<T>(this GameObject self, Action<T> apply) where T : Component {
-            var comp                = self.GetComponent<T>();
-            if (comp.IsNull()) comp = self.AddComponent<T>();
-            apply?.Invoke(comp);
+        public static GameObject EnsureCompAct<T>(this GameObject self, Action<T> apply, out T o) where T : Component {
+            o = self.GetComponent<T>();
+            if (o.IsNull()) o = self.AddComponent<T>();
+            apply?.Invoke(o);
             return self;
         }
 
-        public static GameObject EnsureComp<T>(this GameObject self, Func<T, IEnumerator> apply)
+        public static GameObject EnsureCompCo<T>(this GameObject self, Func<T, IEnumerator> apply, out T o)
             where T : MonoBehaviour {
-            var comp                = self.GetComponent<T>();
-            if (comp.IsNull()) comp = self.AddComponent<T>();
-            if (apply.IsExists()) comp.StartCoroutine(apply(comp));
+            o = self.GetComponent<T>();
+            if (o.IsNull()) o = self.AddComponent<T>();
+            if (apply.IsExists()) o.StartCoroutine(apply(o));
             return self;
         }
 
 
-        public static Transform EnsureComp<T>(this Transform self) where T : Component {
-            var comp                = self.GetComponent<T>();
-            if (comp.IsNull()) comp = self.gameObject.AddComponent<T>();
-            return comp.IsNull() ? self.gameObject.AddComponent<T>().transform : self;
+        public static Transform EnsureComp<T>(this Transform self, out T o) where T : Component {
+            o = self.GetComponent<T>();
+            if (o.IsNull()) o = self.gameObject.AddComponent<T>();
+            return o.IsNull() ? self.gameObject.AddComponent<T>().transform : self;
         }
 
-        public static Transform EnsureComp<T>(this Transform self, Action<T> apply) where T : Component {
-            var comp                = self.GetComponent<T>();
-            if (comp.IsNull()) comp = self.gameObject.AddComponent<T>();
-            apply?.Invoke(comp);
+        public static Transform EnsureComp<T>(this Transform self, Action<T> apply, out T o) where T : Component {
+            o = self.GetComponent<T>();
+            if (o.IsNull()) o = self.gameObject.AddComponent<T>();
+            apply?.Invoke(o);
             return self;
         }
 
-        public static Component EnsureComp<T>(this Component self) where T : Component {
-            var comp = self.GetComponent<T>();
-            if (comp.IsNull()) self.gameObject.AddComponent<T>();
+        public static Component EnsureComp<T>(this Component self, out T o) where T : Component {
+            o = self.GetComponent<T>();
+            if (o.IsNull()) o = self.gameObject.AddComponent<T>();
             return self;
         }
 
-        public static Component EnsureComp<T>(this Component self, Action<T> apply) where T : Component {
-            var comp                = self.GetComponent<T>();
-            if (comp.IsNull()) comp = self.gameObject.AddComponent<T>();
-            apply?.Invoke(comp);
+        public static Component EnsureComp<T>(this Component self, Action<T> apply, out T o) where T : Component {
+            o = self.GetComponent<T>();
+            if (o.IsNull()) o = self.gameObject.AddComponent<T>();
+            apply?.Invoke(o);
             return self;
         }
 
-        public static GameObject Instantiate(this GameObject self) {
-            return GameObject.Instantiate(self);
-        }
-
-        public static GameObject Instantiate(this GameObject self, Transform parent) {
+        public static GameObject Instantiate(this GameObject self, Transform parent = null) {
+            if (parent.IsNull()) return GameObject.Instantiate(self);
             return GameObject.Instantiate(self, parent);
         }
 

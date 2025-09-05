@@ -1,0 +1,6 @@
+{
+  "name": "com.lilhelper.parsing",
+  "references": [
+    "com.lilhelper"
+  ]
+}
