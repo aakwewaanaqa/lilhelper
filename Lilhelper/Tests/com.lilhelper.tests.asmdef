@@ -3,9 +3,13 @@
     "references": [
         "com.lilhelper",
         "UnityEditor.TestRunner",
-        "UnityEngine.TestRunner"
+        "UnityEngine.TestRunner",
+        "com.lilhelper.parsing"
     ],
     "overrideReferences": true,
+    "includePlatforms": [
+        "Editor"
+    ],
     "precompiledReferences": [
         "nunit.framework.dll"
     ],

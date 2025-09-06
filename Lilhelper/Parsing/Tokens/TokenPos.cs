@@ -1,17 +1,10 @@
 namespace Lilhelper.Parsing.Tokens {
-    public class TokenPos : IPosition {
+    public struct TokenPos : IPosition {
         public int Pos { get; set; }
 
         public int Line { get; set; }
 
         public int Column { get; set; }
-
-        public TokenPos Clone() =>
-            new() {
-                Pos    = Pos,
-                Line   = Line,
-                Column = Column,
-            };
 
         public override string ToString() {
             return $"{Line}:{Column}";
@@ -28,6 +21,21 @@ namespace Lilhelper.Parsing.Tokens {
                 Pos    = 0,
                 Line   = 1,
                 Column = 1,
+            };
+        }
+
+        public static TokenPos operator +(TokenPos p, char c) {
+            return c switch {
+                '\r' or '\n' => new TokenPos {
+                    Pos    = p.Pos  + 1,
+                    Line   = p.Line + 1,
+                    Column = 1
+                },
+                _ => new TokenPos {
+                    Pos    = p.Pos + 1,
+                    Line   = p.Line,
+                    Column = p.Column + 1
+                }
             };
         }
     }

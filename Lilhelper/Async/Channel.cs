@@ -11,11 +11,11 @@ namespace Lilhelper.Async {
 
         public Channel(Ctx ctx) {
             if (ctx is null) {
-                this.Ctx = new Ctx();
+                this.Ctx  = new Ctx();
                 isSelfCtx = true;
             } else {
                 ctx.ThrowIfCancel();
-                this.Ctx = ctx;
+                this.Ctx  = ctx;
                 isSelfCtx = false;
             }
         }
@@ -41,9 +41,10 @@ namespace Lilhelper.Async {
         public bool TryRead(Action<T> onVal) {
             Ctx?.ThrowIfCancel();
             if (values.Count <= 0) return false;
-            
+
+            var val = values[^1];
             values.RemoveAt(values.Count - 1);
-            onVal?.Invoke(values[^1]);
+            onVal?.Invoke(val);
             return true;
         }
 

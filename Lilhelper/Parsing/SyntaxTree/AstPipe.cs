@@ -1,3 +1,3 @@
 namespace Lilhelper.Parsing.SyntaxTree {
-    public delegate AstResult AstPipe(AstParser self);
+    public delegate AstResult AstPipe(ref AstParser self);
 }

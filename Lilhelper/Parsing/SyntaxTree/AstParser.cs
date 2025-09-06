@@ -3,12 +3,12 @@ using Lilhelper.Parsing.Tokens;
 
 namespace Lilhelper.Parsing.SyntaxTree {
     public ref struct AstParser {
-        public Tokenizer Tokenizer { get; }
-        public AstCtx    AstCtx    { get; }
+        public Tokenizer tokenizer;
+        public AstCtx    astCtx;
 
         public AstParser(string src) {
-            Tokenizer = new Tokenizer(src);
-            AstCtx    = new AstCtx();
+            tokenizer = new Tokenizer(src);
+            astCtx    = new AstCtx();
         }
     }
 }

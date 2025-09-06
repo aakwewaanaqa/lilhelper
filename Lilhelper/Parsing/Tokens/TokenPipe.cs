@@ -1,3 +1,3 @@
 namespace Lilhelper.Parsing.Tokens {
-    public delegate TokenResult TokenPipe(Tokenizer self);
+    public delegate TokenResult TokenPipe(ref Tokenizer self);
 }
