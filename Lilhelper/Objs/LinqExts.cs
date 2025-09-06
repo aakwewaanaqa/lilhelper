@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Lilhelper.Objs {
-    public static class CollectionExts {
+    public static class LinqExts {
         public static IDictionary<int, T> ToIndexDict<T>(this T[] self) {
             var dict = new Dictionary<int, T>();
             for (int i = 0; i < self.Length; i++) {

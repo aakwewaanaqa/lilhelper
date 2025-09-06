@@ -80,7 +80,7 @@ namespace Lilhelper.Parsing.Tokens {
                 var pos       = self.Pos;
                 var pipeMany0 = a.Many0();
                 var ofMany0   = pipeMany0(ref self);
-                if (ofMany0.IsErr) {
+                if (ofMany0.IsErr || ofMany0.IsNone) {
                     self.Pos = pos;
                     return Error.ExpectationFail(supposed, pos);
                 }

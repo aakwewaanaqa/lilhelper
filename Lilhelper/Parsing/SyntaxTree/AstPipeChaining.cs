@@ -56,7 +56,9 @@ namespace Lilhelper.Parsing.SyntaxTree {
                     return Error.ExpectationFail(
                         $"{supposed} on then()", pos, ofA.err);
 
-                return new AstResult();
+                return new TokenAstNode {
+                    token = ofA.token,
+                }.AsOk();
             }
         }
     }

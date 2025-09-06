@@ -14,19 +14,13 @@ namespace Lilhelper.Parsing.Tokens {
             pos.Pos < 0
          || pos.Pos >= src.Length;
 
-        public bool IsEof(int count) =>
-            pos.Pos         < 0
-         || pos.Pos         >= src.Length
-         || pos.Pos + count >= src.Length;
-
-
         public Tokenizer(string src) {
             this.src = src.AsSpan();
             pos      = TokenPos.New();
         }
 
         private char Head => src[pos.Pos];
-        
+
         public bool TryHead(out char c) {
             c = '\0';
 
@@ -38,11 +32,14 @@ namespace Lilhelper.Parsing.Tokens {
 
         public bool TryPeek(int count, out ReadOnlySpan<char> head) {
             head = string.Empty;
-            if (IsEof(count)) return false;
+            if (pos.Pos < 0
+             || pos.Pos         > src.Length
+             || pos.Pos + count > src.Length)
+                return false;
             head = src.Slice(pos.Pos, count);
             return true;
         }
-        
+
         public TokenDim Advance() {
             var start = pos;
             pos += Head;
@@ -57,6 +54,7 @@ namespace Lilhelper.Parsing.Tokens {
             for (int i = 0; i < count; i++) {
                 pos += Head;
             }
+
             dim.end = pos;
             return dim;
         }

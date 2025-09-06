@@ -2,8 +2,8 @@ using Lilhelper.Parsing.Tokens;
 using NUnit.Framework;
 using static Lilhelper.Parsing.Tokens.TokenizeUnits;
 
-namespace Tests {
-    public partial class ParsingTests {
+namespace Lilhelper.Tests {
+    public class ParsingTests {
         [Test]
         public void A_Then_B() {
             var tokenizer = new Tokenizer("ab");

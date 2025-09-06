@@ -1,7 +1,7 @@
 using Lilhelper.Debugs;
 using NUnit.Framework;
 
-namespace Tests {
+namespace Lilhelper.Tests {
     public class DebugTests {
         [Test]
         public void Test() {
