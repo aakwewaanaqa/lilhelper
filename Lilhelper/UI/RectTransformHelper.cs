@@ -3,6 +3,10 @@ using UnityEngine;
 namespace Lilhelper.UI {
     [ExecuteAlways]
     [AddComponentMenu("Lilhelper/UI/Rect Transform Helper")]
+    /// <summary>
+    /// RectTransform 輔助元件：提供常用屬性存取與維持寬高比選項。
+    /// RectTransform helper: exposes common properties and an option to preserve aspect.
+    /// </summary>
     public class RectTransformHelper : MonoBehaviour {
         [SerializeField] private RectTransform rectTransform;
         [SerializeField] private bool          preserveAspect;

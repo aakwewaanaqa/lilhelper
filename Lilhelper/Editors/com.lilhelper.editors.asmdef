@@ -1,9 +1,12 @@
 {
-  "name": "com.lilhelper.editors",
-  "references": [
-    "com.lilhelper"
-  ],
-  "includePlatforms": [
-    "Editor"
-  ]
+    "name": "com.lilhelper.editors",
+    "references": [
+        "com.lilhelper"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "defineConstraints": [
+        "UNITY_2017_1_OR_NEWER"
+    ]
 }
