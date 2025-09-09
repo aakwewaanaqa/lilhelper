@@ -79,12 +79,29 @@ namespace Lilhelper.Objs {
             return self;
         }
 
+        /// <summary>
+        /// 在 Transform 所屬的 GameObject 上確保存在指定類型的組件。
+        /// Ensure that a component of type T exists on the Transform's GameObject.
+        /// </summary>
+        /// <typeparam name="T">組件型別。Component type.</typeparam>
+        /// <param name="self">目標 Transform。Target transform.</param>
+        /// <param name="o">輸出取得/新增的組件。Output ensured component.</param>
+        /// <returns>原始 Transform（或其所屬 GameObject 的 Transform）。The original Transform.</returns>
         public static Transform EnsureComp<T>(this Transform self, out T o) where T : Component {
             o = self.GetComponent<T>();
             if (o.IsNull()) o = self.gameObject.AddComponent<T>();
             return o.IsNull() ? self.gameObject.AddComponent<T>().transform : self;
         }
 
+        /// <summary>
+        /// 在 Transform 所屬的 GameObject 上確保存在指定類型的組件，並對其套用動作。
+        /// Ensure a component of type T exists on the Transform's GameObject and apply an action to it.
+        /// </summary>
+        /// <typeparam name="T">組件型別。Component type.</typeparam>
+        /// <param name="self">目標 Transform。Target transform.</param>
+        /// <param name="apply">要套用於組件的動作。Action to apply on the component.</param>
+        /// <param name="o">輸出取得/新增的組件。Output ensured component.</param>
+        /// <returns>原始 Transform。The original Transform.</returns>
         public static Transform EnsureComp<T>(this Transform self, Action<T> apply, out T o) where T : Component {
             o = self.GetComponent<T>();
             if (o.IsNull()) o = self.gameObject.AddComponent<T>();

@@ -16,5 +16,11 @@ namespace Lilhelper.Async {
         /// </summary>
         /// <param name="val">要寫入的值。The value to write.</param>
         void Write(T val);
+        
+        /// <summary>
+        /// 當前通道內的元素數量。
+        /// Current number of elements stored in the channel.
+        /// </summary>
+        int Length { get; }
     }
 }
