@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 
 namespace Lilhelper.Parsing.Tokens {
     public static class TokenizeUnits {
@@ -51,6 +52,24 @@ namespace Lilhelper.Parsing.Tokens {
                     token = new Token {
                         content   = content,
                         dimension = self.Advance(str.Length)
+                    }
+                };
+            }
+        }
+
+        public static TokenPipe DoHeadRegex(Regex regex) {
+            return Pipe;
+
+            TokenResult Pipe(ref Tokenizer self) {
+                var pos = self.Pos;
+                if (!self.TryHeadRegex(regex, out var head)) {
+                    return Error.ExpectationFail(regex.ToString(), pos);
+                }
+
+                return new TokenResult {
+                    token = new Token {
+                        content   = head.ToString(),
+                        dimension = self.Advance(head.Length)
                     }
                 };
             }

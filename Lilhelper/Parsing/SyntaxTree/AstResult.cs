@@ -1,5 +1,5 @@
 namespace Lilhelper.Parsing.SyntaxTree {
-    public struct AstResult {
+    public struct AstResult : IResult {
         public IAstNode node;
         public Error    err;
 
@@ -16,7 +16,7 @@ namespace Lilhelper.Parsing.SyntaxTree {
         public bool IsErr => err is not null;
 
         public bool IsOk => err is null;
-        
+
         public static implicit operator AstResult(Error err) => Err(err);
     }
 }

@@ -1,4 +1,12 @@
+using Lilhelper.Parsing.SyntaxTree;
+
 namespace Lilhelper.Parsing.Tokens {
+    /// <summary>
+    ///
+    /// </summary>
+    /// <remarks>
+    /// 我很想繼承 IResult 但是 C# 版本太舊了。。
+    /// </remarks>
     public ref struct TokenResult {
         public Token token;
         public Error err;
@@ -18,7 +26,7 @@ namespace Lilhelper.Parsing.Tokens {
         public static implicit operator TokenResult(Token token) => new() {
             token = token
         };
-        
+
         public static implicit operator TokenResult(Error err) => Err(err);
     }
 }
