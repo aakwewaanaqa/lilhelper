@@ -4,6 +4,8 @@ using Lilhelper.Async;
 
 namespace Lilhelper.AssetsProto {
     public interface IAssetProto<out T> {
-        IEnumerator Load(string path, IWriteChannel<T> wc);
+        IAssetProto<T> SetPath(string path);
+        string         GetPath();
+        IEnumerator    Load(IWriteChannel<T> wc);
     }
 }

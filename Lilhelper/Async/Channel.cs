@@ -13,12 +13,12 @@ namespace Lilhelper.Async {
         private readonly bool     isSelfCtx;
         private          bool     isWritten;
 
-                /// <summary>
-                /// 通道中目前元素數量。
-                /// Current number of elements stored in the channel.
-                /// </summary>
-                public int Length => values.Count;
-        
+        /// <summary>
+        /// 通道中目前元素數量。
+        /// Current number of elements stored in the channel.
+        /// </summary>
+        public int Length => values.Count;
+
         /// <summary>
         /// 取消內容，用於跨 API 傳遞/檢查取消狀態。
         /// Cancellation context used to propagate/check cancellation across APIs.
@@ -32,11 +32,11 @@ namespace Lilhelper.Async {
         /// <param name="ctx">取消內容；null 代表自建。Cancellation context; null means self-owned context will be created.</param>
         public Channel(Ctx ctx) {
             if (ctx is null) {
-                Ctx  = new Ctx();
+                Ctx       = new Ctx();
                 isSelfCtx = true;
             } else {
                 ctx.ThrowIfCancel();
-                Ctx  = ctx;
+                Ctx       = ctx;
                 isSelfCtx = false;
             }
         }

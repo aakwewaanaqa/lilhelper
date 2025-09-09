@@ -27,5 +27,13 @@ namespace Lilhelper.Objs {
             arr = self.ToArray();
             return self;
         }
+
+        public static IList<T> IterE<T>(this IList<T> self, Action<T, bool> loop) {
+            for (int i = 0; i < self.Count; i++) {
+                loop(self[i], i == self.Count - 1);
+            }
+
+            return self;
+        }
     }
 }

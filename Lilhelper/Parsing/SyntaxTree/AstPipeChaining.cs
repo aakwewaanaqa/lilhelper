@@ -12,6 +12,19 @@ namespace Lilhelper.Parsing.SyntaxTree {
             }
         }
 
+        public static AstPipe Try(this AstPipe a) {
+            return Pipe;
+
+            AstResult Pipe(ref AstParser self) {
+                var ofA = a(ref self);
+                if (ofA.IsErr)
+                    return new() {
+                        node = null
+                    };
+                return ofA;
+            }
+        }
+
         public static AstPipe Then(this AstPipe a, AstPipe b, string supposed = null) {
             return Pipe;
 
@@ -52,9 +65,11 @@ namespace Lilhelper.Parsing.SyntaxTree {
             AstResult Pipe(ref AstParser self) {
                 var pos = self.tokenizer.Pos;
                 var ofA = a(ref self.tokenizer);
-                if (ofA.IsErr)
+                if (ofA.IsErr) {
+                    self.tokenizer.Pos = pos;
                     return Error.ExpectationFail(
                         $"{supposed} on then()", pos, ofA.err);
+                }
 
                 return new TokenAstNode {
                     token = ofA.token,

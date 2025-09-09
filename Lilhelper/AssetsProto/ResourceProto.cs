@@ -17,14 +17,23 @@ namespace Lilhelper.AssetsProto {
         /// </summary>
         private IWriteChannel<T> ch;
 
+        /// <summary>EN: Path under Resources. ZH: Resources 下的資產路徑。</summary>
+        private string path;
+
+        public IAssetProto<T> SetPath(string path) {
+            this.path = path;
+            return this;
+        }
+
+        public string GetPath() => path;
+
         /// <summary>
         /// EN: Load an asset from Resources by path and write it to the provided channel.
         /// ZH: 依路徑從 Resources 載入資產，並寫入到提供的通道。
         /// </summary>
-        /// <param name="path">EN: Path under Resources. ZH: Resources 下的資產路徑。</param>
         /// <param name="wc">EN: Channel to write loaded asset. ZH: 用於輸出已載入資產的通道。</param>
         /// <returns>EN: Enumerator for Unity coroutines. ZH: 可供 Unity 協程使用的列舉器。</returns>
-        public IEnumerator Load(string path, IWriteChannel<T> wc) {
+        public IEnumerator Load(IWriteChannel<T> wc) {
             ch = wc;
             var asset = Resources.Load<T>(path);
             // EN: If asset is missing, throw to surface configuration errors early.
