@@ -9,18 +9,18 @@ namespace Lilhelper.Objs {
     /// </summary>
     public static class Exts {
         /// <summary>
-                /// 判斷是否為 Unity 意義下的 null（包含被銷毀的 UnityEngine.Object）。
-                /// Determine if the object is null in Unity sense (including destroyed UnityEngine.Object).
-                /// </summary>
-                public static bool IsNull(this object self) {
+        /// 判斷是否為 Unity 意義下的 null（包含被銷毀的 UnityEngine.Object）。
+        /// Determine if the object is null in Unity sense (including destroyed UnityEngine.Object).
+        /// </summary>
+        public static bool IsNull(this object self) {
             return self is null || self.Equals(null);
         }
 
         /// <summary>
-                /// 判斷物件是否存在（非 Unity 虛擬 null）。
-                /// Determine if the object exists (not Unity's fake null).
-                /// </summary>
-                public static bool IsExists(this object self) {
+        /// 判斷物件是否存在（非 Unity 虛擬 null）。
+        /// Determine if the object exists (not Unity's fake null).
+        /// </summary>
+        public static bool IsExists(this object self) {
             return self is not null && !self.Equals(null);
         }
 
@@ -53,12 +53,12 @@ namespace Lilhelper.Objs {
         }
 
         /// <summary>
-                /// 確保組件存在並套用動作。
-                /// Ensure component exists on GameObject and apply an action.
-                /// </summary>
-                /// <param name="apply">對組件進行設定的動作。Action to apply on the component.</param>
-                /// <param name="o">輸出取得/新增的組件。Output ensured component.</param>
-                public static GameObject EnsureCompAct<T>(this GameObject self, Action<T> apply, out T o) where T : Component {
+        /// 確保組件存在並套用動作。
+        /// Ensure component exists on GameObject and apply an action.
+        /// </summary>
+        /// <param name="apply">對組件進行設定的動作。Action to apply on the component.</param>
+        /// <param name="o">輸出取得/新增的組件。Output ensured component.</param>
+        public static GameObject EnsureCompAct<T>(this GameObject self, Action<T> apply, out T o) where T : Component {
             o = self.GetComponent<T>();
             if (o.IsNull()) o = self.AddComponent<T>();
             apply?.Invoke(o);
@@ -92,6 +92,20 @@ namespace Lilhelper.Objs {
             if (o.IsNull()) o = self.gameObject.AddComponent<T>();
             return o.IsNull() ? self.gameObject.AddComponent<T>().transform : self;
         }
+
+        /// <summary>
+        /// 確保組件存在並套用動作。
+        /// Ensure component exists on GameObject and apply an action.
+        /// </summary>
+        /// <param name="apply">對組件進行設定的動作。Action to apply on the component.</param>
+        /// <param name="o">輸出取得/新增的組件。Output ensured component.</param>
+        public static Transform EnsureCompAct<T>(this Transform self, Action<T> apply, out T o) where T : Component {
+            o = self.GetComponent<T>();
+            if (o.IsNull()) o = self.gameObject.AddComponent<T>();
+            apply?.Invoke(o);
+            return self;
+        }
+
 
         /// <summary>
         /// 在 Transform 所屬的 GameObject 上確保存在指定類型的組件，並對其套用動作。
