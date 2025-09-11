@@ -20,15 +20,15 @@ namespace Lilhelper.Algebra {
             this.shapes = shapes.ToList();
         }
 
-        public Graph CombineCloseness(float epsilon = 1f) {
+        public Graph CombineCloseness(float epsilon) {
             // Build a unique list of all Point instances across all shapes
             var unique = new List<Point>();
             var index  = new Dictionary<Point, int>();
 
             foreach (var sh in shapes) {
-                if (sh == null || sh.Count <= 0) continue;
+                if (sh == null || sh.PointCount <= 0) continue;
 
-                for (int i = 0; i < sh.Count; i++) {
+                for (int i = 0; i < sh.PointCount; i++) {
                     var p = sh[new(i)];
 
                     if (p == null) continue;

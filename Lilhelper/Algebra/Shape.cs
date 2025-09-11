@@ -11,7 +11,14 @@ namespace Lilhelper.Algebra {
         private readonly IReadOnlyList<Point> points;
         private readonly IReadOnlyList<Seg>   segments;
 
-        public int Count => points.Count;
+        public int PointCount => points.Count;
+
+        public IReadOnlyList<Point> Points => points;
+
+        public int SegmentCount => segments.Count;
+
+        public IReadOnlyList<Seg> Segments => segments;
+
         public Point this[Index i] => points[i];
 
         public Shape(IEnumerable<Point> points) {
@@ -103,14 +110,13 @@ namespace Lilhelper.Algebra {
         /// <returns>
         /// EN: Signed area in square units.
         /// ZH: 有符号面积（平方单位）。</returns>
-        public float SignedArea(float epsilon = Consts.EPSILON)
-        {
+        public float SignedArea(float epsilon = Consts.EPSILON) {
             if (points == null || points.Count < 3) return 0f;
 
             double sum = 0.0;
-            int n = points.Count;
-            for (int i = 0; i < n; i++)
-            {
+            int    n   = points.Count;
+
+            for (int i = 0; i < n; i++) {
                 var p = points[i].pos;
                 var q = points[(i + 1) % n].pos;
                 sum += (double)p.x * q.y - (double)q.x * p.y;
@@ -330,30 +336,28 @@ namespace Lilhelper.Algebra {
         }
 
         // Internals used by Graph to remap close points and rebuild edges without exposing mutable collections.
-        internal void RemapPointsInPlace(System.Collections.Generic.Dictionary<Point, Point> map)
-        {
+        internal void RemapPointsInPlace(System.Collections.Generic.Dictionary<Point, Point> map) {
             if (points is not System.Collections.Generic.List<Point> lp) return;
 
             // Remap vertices
-            for (int i = 0; i < lp.Count; i++)
-            {
+            for (int i = 0; i < lp.Count; i++) {
                 var old = lp[i];
-                if (old != null && map != null && map.TryGetValue(old, out var rep))
-                {
+
+                if (old != null && map != null && map.TryGetValue(old, out var rep)) {
                     lp[i] = rep;
                 }
             }
 
             // Rebuild segments to reference the updated vertices
-            if (segments is System.Collections.Generic.List<Seg> ls)
-            {
+            if (segments is System.Collections.Generic.List<Seg> ls) {
                 ls.Clear();
+
                 if (lp.Count <= 1) return;
-                for (int i = 0; i < lp.Count; i++)
-                {
+
+                for (int i = 0; i < lp.Count; i++) {
                     bool isLast = i == lp.Count - 1;
-                    var a = lp[i];
-                    var b = isLast ? lp[0] : lp[i + 1];
+                    var  a      = lp[i];
+                    var  b      = isLast ? lp[0] : lp[i + 1];
                     ls.Add(new Seg(a, b));
                 }
             }
