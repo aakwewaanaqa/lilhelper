@@ -1,0 +1,13 @@
+{
+    "name": "com.lilhelper.algebra.tests",
+    "references": [
+        "com.lilhelper",
+        "com.lilhelper.algebra",
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner"
+    ],
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ]
+}

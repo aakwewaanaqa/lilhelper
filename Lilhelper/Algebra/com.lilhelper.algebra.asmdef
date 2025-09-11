@@ -1,0 +1,6 @@
+{
+    "name": "com.lilhelper.algebra",
+    "references": [
+        "com.lilhelper"
+    ]
+}
