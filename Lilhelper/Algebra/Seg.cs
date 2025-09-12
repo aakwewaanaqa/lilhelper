@@ -15,6 +15,8 @@ namespace Lilhelper.Algebra {
 
         public float Magnitude => (to.pos - from.pos).magnitude;
 
+        public Point MidPoint => new((from.pos + to.pos) / 2f);
+        
         public bool IsOnSeg(Point p, float epsilon = 1e-6f) {
             return Cross(p.pos - from.pos, to.pos - from.pos).Approx(0f, epsilon);
         }
