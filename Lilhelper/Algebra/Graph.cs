@@ -5,8 +5,8 @@ using System.Linq;
 namespace Lilhelper.Algebra {
     public class Graph {
 
-        private          List<Shape>              shapes;
-        private readonly List<Node>               nodes = new();
+        private          List<Shape>              shapes = new();
+        private readonly List<Node>               nodes  = new();
         private          IReadOnlyList<NodeGroup> groups;
 
         public IReadOnlyList<Shape> Shapes => shapes;
@@ -21,8 +21,30 @@ namespace Lilhelper.Algebra {
             return this;
         }
 
+        /// <summary>
+        /// Merges close-by points across all shapes into clusters and rewires shapes so that
+        /// each cluster is represented by a single shared <see cref="Point"/> reference.
+        /// </summary>
+        /// <param name="epsilon">
+        /// Distance threshold for merging. Two points whose positions are strictly closer than
+        /// <c>epsilon</c> (i.e., <c>distance &lt; epsilon</c>, not <c>&lt;=</c>) are merged into the same cluster.
+        /// </param>
+        /// <remarks>
+        /// Algorithm overview:
+        /// - Collects a unique list of <see cref="Point"/> instances (by reference equality) used by all shapes.
+        /// - Performs an O(N^2) Union-Find pass, merging indices of points whose positions are within <paramref name="epsilon"/>.
+        /// - Builds clusters; for each cluster, chooses the first point as the representative without changing its position,
+        ///   thus geometry is not moved.
+        /// - Replaces all occurrences of clustered points in every shape via <c>RemapPointsInPlace</c> so they reference the
+        ///   same representative <see cref="Point"/> instance.
+        /// - Rebuilds <see cref="nodes"/> so that there is exactly one <see cref="Node"/> per cluster; <c>Node.volume</c>
+        ///   equals the number of original points merged into that cluster.
+        ///
+        /// Therefore: overlapping or near-identical points do not merely get grouped; they become a single shared Point
+        /// reference across shapes after this call.
+        /// </remarks>
         public Graph CombineCloseness(float epsilon) {
-            // Build a unique list of all Point instances across all shapes
+            // 1) Build a unique list of all Point instances across all shapes (by identity/reference).
             var unique = new List<Point>();
             var index  = new Dictionary<Point, int>();
 
@@ -43,17 +65,15 @@ namespace Lilhelper.Algebra {
 
             if (n == 0) {
                 nodes.Clear();
-
                 return this;
             }
 
-            // Union-Find structure
+            // 2) Union-Find structure to cluster points with distance < epsilon
             int[] parent = new int[n];
-
             for (int i = 0; i < n; i++)
                 parent[i] = i;
 
-            // Merge points that are within epsilon (distance < epsilon)
+            // Merge points that are within epsilon (STRICT: distance < epsilon)
             for (int i = 0; i < n; i++) {
                 var pi = unique[i];
                 var vi = pi.pos;
@@ -68,7 +88,7 @@ namespace Lilhelper.Algebra {
                 }
             }
 
-            // Build clusters and representative mapping
+            // 3) Build clusters and representative mapping (each point -> its representative)
             var repMap     = new Dictionary<Point, Point>();
             var clusterMap = new Dictionary<int, List<Point>>();
 
@@ -83,15 +103,15 @@ namespace Lilhelper.Algebra {
                 list.Add(unique[i]);
             }
 
-            // Clear and fill nodes
+            // 4) Rebuild nodes: one Node per cluster; pick first point as representative
             nodes.Clear();
 
             foreach (var kv in clusterMap) {
                 var list = kv.Value;
-
                 if (list.Count == 0) continue;
-                // Representative: use the first point to avoid moving geometry
-                var rep                           = list[0];
+
+                // Representative: use the first original point in the cluster to avoid moving geometry
+                var rep = list[0];
                 foreach (var p in list) repMap[p] = rep;
 
                 nodes.Add(new() {
@@ -100,7 +120,8 @@ namespace Lilhelper.Algebra {
                 });
             }
 
-            // Apply remapping to each shape (also rebuilds their segments)
+            // 5) Apply remapping to each shape: all clustered points now share the SAME Point reference
+            //    (RemapPointsInPlace should rebuild segments if needed.)
             foreach (var sh in shapes) {
                 sh?.RemapPointsInPlace(repMap);
             }
@@ -109,7 +130,6 @@ namespace Lilhelper.Algebra {
 
             void Union(int a, int b) {
                 int ra = Find(a), rb = Find(b);
-
                 if (ra == rb) return;
                 parent[rb] = ra; // simple union; no rank for simplicity
             }
@@ -119,7 +139,6 @@ namespace Lilhelper.Algebra {
                     parent[a] = parent[parent[a]];
                     a         = parent[a];
                 }
-
                 return a;
             }
         }

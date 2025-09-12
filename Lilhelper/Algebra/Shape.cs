@@ -336,8 +336,8 @@ namespace Lilhelper.Algebra {
         }
 
         // Internals used by Graph to remap close points and rebuild edges without exposing mutable collections.
-        internal void RemapPointsInPlace(System.Collections.Generic.Dictionary<Point, Point> map) {
-            if (points is not System.Collections.Generic.List<Point> lp) return;
+        internal void RemapPointsInPlace(Dictionary<Point, Point> map) {
+            if (points is not List<Point> lp) return;
 
             // Remap vertices
             for (int i = 0; i < lp.Count; i++) {
@@ -349,7 +349,7 @@ namespace Lilhelper.Algebra {
             }
 
             // Rebuild segments to reference the updated vertices
-            if (segments is System.Collections.Generic.List<Seg> ls) {
+            if (segments is List<Seg> ls) {
                 ls.Clear();
 
                 if (lp.Count <= 1) return;
