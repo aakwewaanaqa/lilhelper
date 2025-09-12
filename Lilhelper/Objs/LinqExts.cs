@@ -4,7 +4,6 @@ using System.Linq;
 
 namespace Lilhelper.Objs {
     public static class LinqExts {
-
         public static IDictionary<int, T> ToIndexDict<T>(this T[] self) {
             var dict = new Dictionary<int, T>();
 
@@ -44,5 +43,11 @@ namespace Lilhelper.Objs {
             return self.ElementAt(UnityEngine.Random.Range(0, self.Count()));
         }
 
+        public static T Random1Remove<T>(this IList<T> self) {
+            var index = UnityEngine.Random.Range(0, self.Count());
+            var item  = self[index];
+            self.RemoveAt(index);
+            return item;
+        }
     }
 }
