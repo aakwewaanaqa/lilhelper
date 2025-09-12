@@ -5,8 +5,8 @@ using System.Linq;
 namespace Lilhelper.Algebra {
     public class Graph {
 
-        private readonly List<Shape>              shapes;
-        private readonly List<Node>               nodes;
+        private          List<Shape>              shapes;
+        private readonly List<Node>               nodes = new();
         private          IReadOnlyList<NodeGroup> groups;
 
         public IReadOnlyList<Shape> Shapes => shapes;
@@ -15,9 +15,10 @@ namespace Lilhelper.Algebra {
 
         public IReadOnlyList<NodeGroup> Groups => groups;
 
-        public Graph(IEnumerable<Shape> shapes) {
-            nodes       = new();
+        public Graph SetShapes(IEnumerable<Shape> shapes) {
             this.shapes = shapes.ToList();
+
+            return this;
         }
 
         public Graph CombineCloseness(float epsilon) {

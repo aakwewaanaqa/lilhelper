@@ -4,8 +4,10 @@ using System.Linq;
 
 namespace Lilhelper.Objs {
     public static class LinqExts {
+
         public static IDictionary<int, T> ToIndexDict<T>(this T[] self) {
             var dict = new Dictionary<int, T>();
+
             for (int i = 0; i < self.Length; i++) {
                 dict.Add(i, self[i]);
             }
@@ -16,6 +18,7 @@ namespace Lilhelper.Objs {
         public static IEnumerable<T> OutIndexDict<T>(this IEnumerable<T> self, out IDictionary<int, T> dict) {
             dict = new Dictionary<int, T>();
             int index = 0;
+
             foreach (var item in self) {
                 dict.Add(index++, item);
             }
@@ -25,6 +28,7 @@ namespace Lilhelper.Objs {
 
         public static IEnumerable<T> OutArray<T>(this IEnumerable<T> self, out T[] arr) {
             arr = self.ToArray();
+
             return self;
         }
 
@@ -35,5 +39,10 @@ namespace Lilhelper.Objs {
 
             return self;
         }
+
+        public static T Random1<T>(this IList<T> self) {
+            return self.ElementAt(UnityEngine.Random.Range(0, self.Count()));
+        }
+
     }
 }

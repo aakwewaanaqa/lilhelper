@@ -100,7 +100,8 @@ namespace Lilhelper.Algebra.Tests {
 
             Debug.Log(stopwatch.Elapsed);
 
-            var graph = new Graph(shapes.Select(m => m.Val))
+            var graph = new Graph()
+                       .SetShapes(shapes.Select(m => m.Val))
                        .CombineCloseness(0.06f)
                        .GroupNodes();
 
