@@ -65,6 +65,12 @@ namespace Lilhelper.Objs {
             return self;
         }
 
+        public static GameObject GetCompAct<T>(this GameObject self, Action<T> apply) {
+            var o = self.GetComponent<T>();
+            apply?.Invoke(o);
+            return self;
+        }
+        
         /// <summary>
         /// 確保組件存在並在 MonoBehaviour 上啟動協程。
         /// Ensure component exists and start a coroutine on the MonoBehaviour.
