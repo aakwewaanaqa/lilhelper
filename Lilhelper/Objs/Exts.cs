@@ -67,6 +67,7 @@ namespace Lilhelper.Objs {
 
         public static GameObject GetCompAct<T>(this GameObject self, Action<T> apply) {
             var o = self.GetComponent<T>();
+            if (o.IsNull()) return self;
             apply?.Invoke(o);
             return self;
         }
