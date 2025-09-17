@@ -43,7 +43,7 @@ namespace Lilhelper.Objs {
             return self.ElementAt(UnityEngine.Random.Range(0, self.Count()));
         }
 
-        public static T Random1Remove<T>(this IList<T> self) {
+        public static T TakeRandom1<T>(this IList<T> self) {
             var index = UnityEngine.Random.Range(0, self.Count());
             var item  = self[index];
             self.RemoveAt(index);

@@ -7,5 +7,7 @@ namespace Lilhelper.Objs {
         
         public static void Todo() => throw new System.NotImplementedException();
         public static void Todo(string msg) => throw new System.NotImplementedException(msg);
+        
+        public static void BadOp(string msg) => throw new System.InvalidOperationException(msg);
     }
 }

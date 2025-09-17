@@ -60,6 +60,12 @@ namespace Lilhelper.Objs {
             return self;
         }
 
+        public static GameObject GetCompOut<T>(this GameObject self, out T o) {
+            o = self.GetComponent<T>();
+            if (o.IsNull()) RaiseErr.NullRef($"Component {typeof(T).Name} not found on GameObject {self.name}");
+            return self;
+        }
+        
         public static GameObject GetCompAct<T>(this GameObject self, Action<T> apply) {
             var o = self.GetComponent<T>();
             if (o.IsNull()) RaiseErr.NullRef($"Component {typeof(T).Name} not found on GameObject {self.name}");
@@ -85,6 +91,12 @@ namespace Lilhelper.Objs {
             o = self.GetComponent<T>();
             if (o.IsNull()) RaiseErr.NullRef($"Component {typeof(T).Name} not found on GameObject {self.name}");
             if (apply.IsExists() && o is MonoBehaviour mono) mono.StartCoroutine(apply(o));
+            return self;
+        }
+
+        public static GameObject AddCompAct<T>(this GameObject self, Action<T> apply) where T : Component {
+            var o = self.AddComponent<T>();
+            apply?.Invoke(o);
             return self;
         }
     }
