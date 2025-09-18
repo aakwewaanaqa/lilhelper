@@ -1,5 +1,3 @@
-using System;
-using Lilhelper.Debugs;
 using Lilhelper.Objs;
 using Lilhelper.UI;
 using UnityEditor;

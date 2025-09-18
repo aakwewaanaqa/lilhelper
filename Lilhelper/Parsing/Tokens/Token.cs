@@ -1,5 +1,3 @@
-using System;
-
 namespace Lilhelper.Parsing.Tokens {
     public struct Token {
         public string   content;

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Hierarchy;
+
 using UnityEngine;
 
 namespace Lilhelper.Algebra.Tests {

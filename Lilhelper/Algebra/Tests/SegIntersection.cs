@@ -1,8 +1,8 @@
 using NUnit.Framework;
 using UnityEngine;
-using UnityEngine.TestTools;
+
 using static NUnit.Framework.Assert;
-using static NUnit.Framework.Is;
+
 using Lilhelper.Objs;
 
 namespace Lilhelper.Algebra.Tests {
