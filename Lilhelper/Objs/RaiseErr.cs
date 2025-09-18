@@ -1,3 +1,5 @@
+using Lilhelper.Async;
+
 using Err = System.Exception;
 
 namespace Lilhelper.Objs {
@@ -9,5 +11,9 @@ namespace Lilhelper.Objs {
         public static void Todo(string msg) => throw new System.NotImplementedException(msg);
         
         public static void BadOp(string msg) => throw new System.InvalidOperationException(msg);
+        
+        public static void IndexErr(int index) => throw new System.IndexOutOfRangeException(index.ToString());
+        
+        public static void NoVal(string msg = null) => throw new ChannelNoValueException(msg, null);
     }
 }

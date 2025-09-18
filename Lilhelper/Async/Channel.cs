@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+using Lilhelper.Objs;
+
 namespace Lilhelper.Async {
     /// <summary>
     /// 簡易型別安全通道：支援寫入、嘗試讀取、等待讀取（可設定逾時），並可作為列舉器消費。
@@ -57,7 +59,7 @@ namespace Lilhelper.Async {
         /// Asynchronous read: waits (with timeout) until an element is available, then invokes the callback.
         /// </summary>
         /// <param name="onVal">取得值後的回調。Callback invoked with the retrieved value.</param>
-        /// <param name="timeout">等待的逾時秒數。Timeout in seconds for waiting.</param>
+        /// <param name="timeout">等待的逾時秒數，小於零就永遠等待。Timeout in seconds for waiting, if less then zero yield always.</param>
         /// <returns>可在 Unity 協程中使用的列舉器。Enumerator usable in Unity coroutines.</returns>
         public IEnumerator Read(Action<T> onVal, double timeout = 15) {
             Ctx?.ThrowIfCancel();
@@ -67,7 +69,10 @@ namespace Lilhelper.Async {
             using var watcher = new OverTimeAlert(TimeSpan.FromSeconds(timeout));
             while (values.Count <= 0) {
                 Ctx?.ThrowIfCancel();
-                yield return watcher.YieldWatching;
+                if (timeout > 0)
+                    yield return watcher.YieldWatching;
+                else 
+                    yield return null;
             }
 
             var val = values[^1];
@@ -75,6 +80,17 @@ namespace Lilhelper.Async {
             onVal?.Invoke(val);
         }
 
+        public T ReadRaw() {
+            Ctx?.ThrowIfCancel();
+
+            if (values.Count <= 0)
+                RaiseErr.NoVal();
+            
+            var val = values[^1];
+            values.RemoveAt(values.Count - 1);
+            return val;
+        }
+        
         /// <summary>
         /// 嘗試立即讀取一筆資料；不會等待，若無可用資料回傳 false。
         /// Try to read a value immediately; does not wait and returns false if none available.
