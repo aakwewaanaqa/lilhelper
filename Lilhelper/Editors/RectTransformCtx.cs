@@ -9,7 +9,7 @@ namespace Lilhelper.ContextMenu {
         public static bool AnchorPositionValid(MenuCommand command) {
             if (command.IsNull()) return false;
             if (command.context is not RectTransform r) return false;
-            return r.parent.GetComponent<RectTransform>().IsExists();
+            return r.parent.GetComponent<RectTransform>().DoExists();
         }
 
         [MenuItem("CONTEXT/RectTransform/Anchor Position")]

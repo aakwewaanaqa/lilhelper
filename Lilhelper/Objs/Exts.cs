@@ -20,7 +20,7 @@ namespace Lilhelper.Objs {
         /// 判斷物件是否存在（非 Unity 虛擬 null）。
         /// Determine if the object exists (not Unity's fake null).
         /// </summary>
-        public static bool IsExists(this object self) {
+        public static bool DoExists(this object self) {
             return self is not null && !self.Equals(null);
         }
 
@@ -80,12 +80,7 @@ namespace Lilhelper.Objs {
             apply?.Invoke(o);
             return self;
         }
-
-        public static GameObject Instantiate(this GameObject self, Transform parent = null) {
-            if (parent.IsNull()) return GameObject.Instantiate(self);
-            return GameObject.Instantiate(self, parent);
-        }
-
+        
         public static T Out<T>(this T self, out T t) {
             t = self;
             return self;
