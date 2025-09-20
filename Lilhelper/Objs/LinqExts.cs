@@ -31,9 +31,31 @@ namespace Lilhelper.Objs {
             return self;
         }
 
-        public static IList<T> IterE<T>(this IList<T> self, Action<T, bool> loop) {
+        public delegate void IterlHandler<T>(T item, bool isLast);
+
+        public static IList<T> IterL<T>(this IList<T> self, IterlHandler<T> loop) {
             for (int i = 0; i < self.Count; i++) {
                 loop(self[i], i == self.Count - 1);
+            }
+
+            return self;
+        }
+
+        public delegate void IterflHandler<T>(T item, bool isFirst, bool isLast);
+
+        public static IList<T> IterFL<T>(this IList<T> self, IterflHandler<T> loop) {
+            for (int i = 0; i < self.Count; i++) {
+                loop(self[i], i == 0, i == self.Count - 1);
+            }
+
+            return self;
+        }
+        
+        public delegate void IteriHandler<T>(T item, int index);
+        
+        public static IList<T> IterI<T>(this IList<T> self, IteriHandler<T> loop) {
+            for (int i = 0; i < self.Count; i++) {
+                loop(self[i], i);
             }
 
             return self;

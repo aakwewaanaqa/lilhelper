@@ -163,5 +163,16 @@ namespace Lilhelper.Objs {
             apply?.Invoke(o);
             return self;
         }
+
+        public static GameObject AddCompActOut<T>(this GameObject self, Action<T> apply, out T o) where T : Component {
+            o = self.AddComponent<T>();
+            apply?.Invoke(o);
+            return self;
+        }
+        
+        public static GameObject AddCompOut<T>(this GameObject self, out T o) where T : Component {
+            o = self.AddComponent<T>();
+            return self;
+        }
     }
 }
