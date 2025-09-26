@@ -1,3 +1,4 @@
+#if UNITY_UGUI
 using Lilhelper.Objs;
 using Lilhelper.UI;
 using UnityEditor;
@@ -58,3 +59,4 @@ namespace Lilhelper.Editors {
         }
     }
 }
+#endif
