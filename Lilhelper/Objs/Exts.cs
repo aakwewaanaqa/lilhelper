@@ -51,7 +51,6 @@ namespace Lilhelper.Objs {
             return self;
         }
 
-
         /// <summary>
         /// 在 Transform 所屬的 GameObject 上確保存在指定類型的組件，並對其套用動作。
         /// Ensure a component of type T exists on the Transform's GameObject and apply an action to it.
@@ -80,10 +79,27 @@ namespace Lilhelper.Objs {
             apply?.Invoke(o);
             return self;
         }
-        
+
         public static T Out<T>(this T self, out T t) {
             t = self;
             return self;
+        }
+
+        public static bool TryCast<T>(this object obj, out T t) {
+            if (obj is T objT) {
+                t = objT;
+                return true;
+            }
+
+            try {
+                t = (T)obj;
+                return true;
+            }
+            catch { // ignored
+            }
+
+            t = default;
+            return false;
         }
     }
 }
