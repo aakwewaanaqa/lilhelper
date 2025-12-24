@@ -5,9 +5,12 @@ using UnityEngine;
 
 using Object = UnityEngine.Object;
 
-namespace Lilhelper.Objs {
-    public static partial class Exts {
-        public static GameObject Instantiate(this GameObject self, Transform parent = null) {
+namespace Lilhelper.Objs
+{
+    public static partial class Exts
+    {
+        public static GameObject Instantiate(this GameObject self, Transform parent = null)
+        {
             if (parent.IsNull()) return Object.Instantiate(self);
             return Object.Instantiate(self, parent);
         }
@@ -34,7 +37,8 @@ namespace Lilhelper.Objs {
         /// The GameObject that contains the ensured component.
         /// 還是回傳原本的 GameObject，方便連續呼叫。
         /// </returns>
-        public static GameObject EnsureComp<T>(this GameObject self, out T o) where T : Component {
+        public static GameObject EnsureComp<T>(this GameObject self, out T o) where T : Component
+        {
             o = self.GetComponent<T>();
             if (o.IsNull()) o = self.AddComponent<T>();
             return self;
@@ -46,7 +50,8 @@ namespace Lilhelper.Objs {
         /// </summary>
         /// <param name="apply">對組件進行設定的動作。Action to apply on the component.</param>
         /// <param name="o">輸出取得/新增的組件。Output ensured component.</param>
-        public static GameObject EnsureCompAct<T>(this GameObject self, Action<T> apply, out T o) where T : Component {
+        public static GameObject EnsureCompAct<T>(this GameObject self, Action<T> apply, out T o) where T : Component
+        {
             o = self.GetComponent<T>();
             if (o.IsNull()) o = self.AddComponent<T>();
             apply?.Invoke(o);
@@ -60,7 +65,8 @@ namespace Lilhelper.Objs {
         /// <param name="apply">要啟動的協程工廠。Coroutine factory to start.</param>
         /// <param name="o">輸出取得/新增的組件。Output ensured component.</param>
         public static GameObject EnsureCompCo<T>(this GameObject self, Func<T, IEnumerator> apply, out T o)
-            where T : MonoBehaviour {
+            where T : MonoBehaviour
+        {
             o = self.GetComponent<T>();
             if (o.IsNull()) o = self.AddComponent<T>();
             if (apply.DoExists()) o.StartCoroutine(apply(o));
@@ -76,7 +82,8 @@ namespace Lilhelper.Objs {
         /// <param name="o">輸出取得的組件。Output component.</param>
         /// <returns>回傳原本的 GameObject，方便鏈式呼叫。Returns the same GameObject for chaining.</returns>
         /// <exception cref="NullReferenceException">當組件不存在時由 RaiseErr.NullRef 拋出。Thrown via RaiseErr.NullRef when component is missing.</exception>
-        public static GameObject GetCompOut<T>(this GameObject self, out T o) {
+        public static GameObject GetCompOut<T>(this GameObject self, out T o)
+        {
             o = self.GetComponent<T>();
             if (o.IsNull()) RaiseErr.NullRef($"Component {typeof(T).Name} not found on GameObject {self.name}");
             return self;
@@ -91,7 +98,8 @@ namespace Lilhelper.Objs {
         /// <param name="apply">要套用於組件的動作。Action to apply to the component.</param>
         /// <returns>回傳原本的 GameObject，方便鏈式呼叫。Returns the same GameObject for chaining.</returns>
         /// <exception cref="NullReferenceException">當組件不存在時由 RaiseErr.NullRef 拋出。Thrown via RaiseErr.NullRef when component is missing.</exception>
-        public static GameObject GetCompAct<T>(this GameObject self, Action<T> apply) {
+        public static GameObject GetCompAct<T>(this GameObject self, Action<T> apply)
+        {
             var o = self.GetComponent<T>();
             if (o.IsNull()) RaiseErr.NullRef($"Component {typeof(T).Name} not found on GameObject {self.name}");
             apply?.Invoke(o);
@@ -108,7 +116,8 @@ namespace Lilhelper.Objs {
         /// <param name="o">輸出取得的組件。Output component.</param>
         /// <returns>回傳原本的 GameObject，方便鏈式呼叫。Returns the same GameObject for chaining.</returns>
         /// <exception cref="NullReferenceException">當組件不存在時由 RaiseErr.NullRef 拋出。Thrown via RaiseErr.NullRef when component is missing.</exception>
-        public static GameObject GetCompActOut<T>(this GameObject self, Action<T> apply, out T o) {
+        public static GameObject GetCompActOut<T>(this GameObject self, Action<T> apply, out T o)
+        {
             o = self.GetComponent<T>();
             if (o.IsNull()) RaiseErr.NullRef($"Component {typeof(T).Name} not found on GameObject {self.name}");
             apply?.Invoke(o);
@@ -125,7 +134,8 @@ namespace Lilhelper.Objs {
         /// <param name="apply">協程工廠；可為 null。Coroutine factory to start; can be null.</param>
         /// <returns>回傳原本的 GameObject，方便鏈式呼叫。Returns the same GameObject for chaining.</returns>
         /// <exception cref="NullReferenceException">當組件不存在時由 RaiseErr.NullRef 拋出。Thrown via RaiseErr.NullRef when component is missing.</exception>
-        public static GameObject GetCompCo<T>(this GameObject self, Func<T, IEnumerator> apply) {
+        public static GameObject GetCompCo<T>(this GameObject self, Func<T, IEnumerator> apply)
+        {
             var o = self.GetComponent<T>();
             if (o.IsNull()) RaiseErr.NullRef($"Component {typeof(T).Name} not found on GameObject {self.name}");
             if (apply.DoExists() && o is MonoBehaviour mono) mono.StartCoroutine(apply(o));
@@ -143,7 +153,8 @@ namespace Lilhelper.Objs {
         /// <param name="o">輸出取得的組件。Output component.</param>
         /// <returns>回傳原本的 GameObject，方便鏈式呼叫。Returns the same GameObject for chaining.</returns>
         /// <exception cref="NullReferenceException">當組件不存在時由 RaiseErr.NullRef 拋出。Thrown via RaiseErr.NullRef when component is missing.</exception>
-        public static GameObject GetCompCoOut<T>(this GameObject self, Func<T, IEnumerator> apply, out T o) {
+        public static GameObject GetCompCoOut<T>(this GameObject self, Func<T, IEnumerator> apply, out T o)
+        {
             o = self.GetComponent<T>();
             if (o.IsNull()) RaiseErr.NullRef($"Component {typeof(T).Name} not found on GameObject {self.name}");
             if (apply.DoExists() && o is MonoBehaviour mono) mono.StartCoroutine(apply(o));
@@ -158,20 +169,29 @@ namespace Lilhelper.Objs {
         /// <param name="self">目標 GameObject。Target GameObject.</param>
         /// <param name="apply">新增後要套用於組件的動作；可為 null。Action to apply to the newly added component; can be null.</param>
         /// <returns>回傳原本的 GameObject，方便鏈式呼叫。Returns the same GameObject for chaining.</returns>
-        public static GameObject AddCompAct<T>(this GameObject self, Action<T> apply) where T : Component {
+        public static GameObject AddCompAct<T>(this GameObject self, Action<T> apply) where T : Component
+        {
             var o = self.AddComponent<T>();
             apply?.Invoke(o);
             return self;
         }
 
-        public static GameObject AddCompActOut<T>(this GameObject self, Action<T> apply, out T o) where T : Component {
+        public static GameObject AddCompActOut<T>(this GameObject self, Action<T> apply, out T o) where T : Component
+        {
             o = self.AddComponent<T>();
             apply?.Invoke(o);
             return self;
         }
-        
-        public static GameObject AddCompOut<T>(this GameObject self, out T o) where T : Component {
+
+        public static GameObject AddCompOut<T>(this GameObject self, out T o) where T : Component
+        {
             o = self.AddComponent<T>();
+            return self;
+        }
+
+        public static GameObject Keep(this GameObject self)
+        {
+            Object.DontDestroyOnLoad(self);
             return self;
         }
     }
