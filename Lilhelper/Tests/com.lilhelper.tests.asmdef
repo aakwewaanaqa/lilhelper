@@ -7,9 +7,6 @@
         "com.lilhelper.parsing"
     ],
     "overrideReferences": true,
-    "includePlatforms": [
-        "Editor"
-    ],
     "precompiledReferences": [
         "nunit.framework.dll"
     ],
