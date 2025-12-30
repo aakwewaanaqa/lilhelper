@@ -1,16 +1,24 @@
 {
     "name": "com.lilhelper.tests",
+    "rootNamespace": "",
     "references": [
         "com.lilhelper",
         "UnityEditor.TestRunner",
         "UnityEngine.TestRunner",
-        "com.lilhelper.parsing"
+        "com.lilhelper.parsing",
+        "com.lilhelper.flutterive"
     ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
     "overrideReferences": true,
     "precompiledReferences": [
         "nunit.framework.dll"
     ],
+    "autoReferenced": true,
     "defineConstraints": [
         "UNITY_INCLUDE_TESTS"
-    ]
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

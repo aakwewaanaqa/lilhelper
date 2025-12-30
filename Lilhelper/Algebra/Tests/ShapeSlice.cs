@@ -3,13 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+
 using Lilhelper.Async;
 using Lilhelper.Objs;
+
 using NUnit.Framework;
+
 using UnityEngine;
 using UnityEngine.TestTools;
+
 using static NUnit.Framework.Assert;
 using static NUnit.Framework.Is;
+
 using Debug = UnityEngine.Debug;
 using Random = UnityEngine.Random;
 
@@ -44,7 +49,7 @@ namespace Lilhelper.Algebra.Tests {
             );
 
             That(rect.IsOnShape(cutter.from, out _));
-            That(rect.IsOnShape(cutter.to,   out _));
+            That(rect.IsOnShape(cutter.to, out _));
             That(rect.TrySlice(cutter, out var a, out var b));
         }
 
@@ -61,7 +66,7 @@ namespace Lilhelper.Algebra.Tests {
 
                 var alert = new OverTimeAlert(TimeSpan.FromSeconds(15));
 
-                for (;;) {
+                for (; ; ) {
                     float ta = Random.value;
                     float tb = Random.value;
 
@@ -71,7 +76,7 @@ namespace Lilhelper.Algebra.Tests {
                     );
 
                     rect.IsOnShape(cutter.from, out var segA);
-                    rect.IsOnShape(cutter.to,   out var segB);
+                    rect.IsOnShape(cutter.to, out var segB);
 
                     if (ReferenceEquals(segA, segB)) {
                         yield return alert.YieldWatching;
@@ -109,11 +114,11 @@ namespace Lilhelper.Algebra.Tests {
             stopwatch.Stop();
 
             new GameObject()
-               .EnsureCompAct<GizmoHelper>(
+               .EnsureCompActOut<GizmoHelper>(
                     it => it.SetGraph(graph).SetSize(0.02f),
                     out var helper);
 
-            That(helper.nodes,  GreaterThan(0));
+            That(helper.nodes, GreaterThan(0));
             That(helper.shapes, GreaterThan(0));
 
             yield return new WaitForSeconds(15);

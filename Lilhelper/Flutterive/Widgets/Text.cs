@@ -1,5 +1,6 @@
 using Lilhelper.Flutterive.Abstractions;
 using Lilhelper.Objs;
+using Lilhelper.Reactive;
 
 using TMPro;
 
@@ -13,37 +14,29 @@ namespace Lilhelper.Flutterive.Widgets {
         public State<IWidget> child;
     }
     public class Text : IWidget {
-        private readonly TextParam param;
+        public readonly TextParam param;
         private GameObject self;
         public Text(in TextParam param) {
             this.param = param;
         }
 
         public RectTransform Build(RectTransform parent) {
-            RectTransform rectTransform;
             new GameObject(nameof(Text))
-                .AddCompActOut(it => it.SetParent(parent), out rectTransform)
+                .Out(out self)
+                .SetUpLayout(parent, out RectTransform rectTransform, out VerticalLayoutGroup layoutGroup)
                 .AddCompAct<TextMeshProUGUI>(it => {
-                    param.data.ActListen(newValue => {
+                    param.data?.ActListenOfHost(newValue => {
                         it.text = newValue;
                         it.fontSize = 24;
                         it.color = Color.black;
-                    });
+                    }, host: self);
                 })
-                .AddCompAct<ContentSizeFitter>(it => {
-                    it.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
-                    it.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-                })
-                .AddCompAct<VerticalLayoutGroup>(it => {
-                    it.childAlignment = TextAnchor.UpperLeft;
-                    it.spacing = 0;
-                })
-                .Out(out self);
+                ;
 
-            param.child.ActListen(newValue => {
+            param.child?.ActListenOfHost(newValue => {
                 param.child.Value?.Kill();
-                newValue.Build(rectTransform);
-            });
+                newValue?.Build(rectTransform);
+            }, host: self);
 
             return rectTransform;
         }
