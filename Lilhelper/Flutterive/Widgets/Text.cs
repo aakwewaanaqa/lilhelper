@@ -8,22 +8,25 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace Lilhelper.Flutterive.Widgets {
+
     public struct TextParam {
         public string key;
         public State<string> data;
         public State<IWidget> child;
     }
-    public class Text : IWidget {
+    public class Text : WidgetBase {
         public readonly TextParam param;
-        private GameObject self;
         public Text(in TextParam param) {
             this.param = param;
         }
 
-        public RectTransform Build(RectTransform parent) {
+        public override RectTransform Build(RectTransform parent) {
             new GameObject(nameof(Text))
                 .Out(out self)
-                .SetUpLayout(parent, out RectTransform rectTransform, out VerticalLayoutGroup layoutGroup)
+                .AssignKey(this, param.key)
+                .SetRectTransform(out RectTransform rectTransform, parent)
+                .SetVerticalLayoutGroup()
+                .SetContentSizeFitter()
                 .AddCompAct<TextMeshProUGUI>(it => {
                     param.data?.ActListenOfHost(newValue => {
                         it.text = newValue;
@@ -39,14 +42,6 @@ namespace Lilhelper.Flutterive.Widgets {
             }, host: self);
 
             return rectTransform;
-        }
-
-        public bool Kill() {
-            if (self.DoExists()) {
-                Object.Destroy(self);
-                return true;
-            }
-            return false;
         }
     }
 }

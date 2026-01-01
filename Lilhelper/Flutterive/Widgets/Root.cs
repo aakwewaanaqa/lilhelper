@@ -13,11 +13,11 @@ namespace Lilhelper.Flutterive.Widgets {
         /// <summary>
         /// Canvas 的設定參數。
         /// </summary>
-        public struct CanvasParam {
+        public class CanvasBlock {
             /// <summary>用於 ScreenSpaceCamera 模式的相機；為 null 時會改用 ScreenSpaceOverlay</summary>
             public Camera camera;
             /// <summary>相機平面距離 (plane distance)</summary>
-            public float planeDistance;
+            public float planeDistance = 10f;
             /// <summary>Canvas 的排序順序 (sorting order)</summary>
             public int sortingOrder;
         }
@@ -25,7 +25,7 @@ namespace Lilhelper.Flutterive.Widgets {
         /// <summary>識別用的 key</summary>
         public string key;
         /// <summary>Canvas 參數的可觀察狀態</summary>
-        public State<CanvasParam> canvasParam;
+        public State<CanvasBlock> canvasParam;
         /// <summary>子 Widget 的可觀察狀態（當變更時會建立新子物件）</summary>
         public State<IWidget> child;
     }
@@ -34,7 +34,7 @@ namespace Lilhelper.Flutterive.Widgets {
     /// 基本 Canvas 根節點。
     /// 建立一個包含 Canvas、CanvasScaler、GraphicRaycaster 與 VerticalLayoutGroup 的根 UI 容器。
     /// </summary>
-    public class Root : IWidget {
+    public class Root : WidgetBase {
         public readonly RootParam param;
         private GameObject self;
         /// <summary>
@@ -49,9 +49,12 @@ namespace Lilhelper.Flutterive.Widgets {
         /// 建立 Root 的 UI 物件並回傳其 RectTransform。
         /// </summary>
         /// <param name="parent">父 RectTransform</param>
-        public RectTransform Build(RectTransform parent) {
+        public override RectTransform Build(RectTransform parent = null) {
             new GameObject(nameof(Root))
                 .Out(out self)
+                .AssignKey(this, param.key)
+                .SetRectTransform(out RectTransform rectTransform, parent)
+                .SetVerticalLayoutGroup()
                 .AddCompAct<Canvas>(it => {
                     // 監聽 Canvas 參數變更，根據是否提供 camera 決定使用 Camera 模式或 Overlay 模式
                     param.canvasParam.ActListenOfHost(val => {
@@ -65,7 +68,6 @@ namespace Lilhelper.Flutterive.Widgets {
                         }
                     }, host: self);
                 })
-                .SetUpLayout(parent, out RectTransform rectTransform, out VerticalLayoutGroup layoutGroup)
                 .AddCompAct<CanvasScaler>(it => {
                     it.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
                     it.referenceResolution = new Vector2(1920, 1080);
@@ -81,13 +83,26 @@ namespace Lilhelper.Flutterive.Widgets {
 
             return rectTransform;
         }
+    }
 
-        public bool Kill() {
-            if (self.DoExists()) {
-                Object.Destroy(self);
-                return true;
-            }
-            return false;
+    public static class RootExt {
+        /// <summary>
+        /// 擴充方法：方便建立 Root Widget。
+        /// </summary>
+        /// <param name="child">子 Widget</param>
+        /// <param name="block">Canvas 參數的可觀察狀態</param>
+        public static Root RootWidget(
+            this IWidget child,
+            Camera cam = null,
+            State<RootParam.CanvasBlock> block = null) {
+            block ??= new RootParam.CanvasBlock();
+            block.Value.camera = cam;
+            return new Root(
+                new RootParam {
+                    canvasParam = block,
+                    child = child.ToState(),
+                }
+            );
         }
     }
 }

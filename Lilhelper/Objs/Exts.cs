@@ -24,6 +24,10 @@ namespace Lilhelper.Objs {
             return self is not null && !self.Equals(null);
         }
 
+        public static bool RefEquals(this object self, object other) {
+            return ReferenceEquals(self, other);
+        }
+
         /// <summary>
         /// 在 Transform 所屬的 GameObject 上確保存在指定類型的組件。
         /// Ensure that a component of type T exists on the Transform's GameObject.
@@ -94,8 +98,7 @@ namespace Lilhelper.Objs {
             try {
                 t = (T)obj;
                 return true;
-            }
-            catch { // ignored
+            } catch { // ignored
             }
 
             t = default;

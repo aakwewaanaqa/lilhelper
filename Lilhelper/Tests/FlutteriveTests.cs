@@ -10,34 +10,62 @@ using UnityEngine;
 using UnityEditor;
 using Lilhelper.Objs;
 using Lilhelper.Reactive;
+using Lilhelper.GetIt;
 
 namespace Lilhelper.Tests {
     public class FlutteriveTests {
+
+        public static void FocusInspectorWindow() {
+            // 取得 UnityEditor Assembly 中的 InspectorWindow 類型
+            var inspectorType = typeof(Editor).Assembly.GetType("UnityEditor.InspectorWindow");
+
+            // 取得該視窗實例 (如果沒有開啟會自動開啟)
+            var inspectorWindow = EditorWindow.GetWindow(inspectorType);
+
+            // 聚焦該視窗
+            if (inspectorWindow != null) {
+                inspectorWindow.Focus();
+            }
+        }
+
+        private Camera cam;
+        private IKeyApi keys;
+
+        [OneTimeSetUp]
+        public void OneTimeSetup() {
+            FocusInspectorWindow();
+            GetItComp.I.Value.Register(() => keys = new KeyApi(), ItLifeTime.Scene);
+            new GameObject(nameof(Camera)).AddCompOut(out cam);
+        }
+
         [UnityTest]
-        public IEnumerator SampleTest() {
+        public IEnumerator RootTest() {
+            Selection.activeGameObject =
+                new Root(new RootParam()).Build().gameObject;
+            yield return new WaitForSeconds(5f);
+            yield break;
+        }
 
-            new GameObject(nameof(Camera)).AddCompOut(out Camera cam);
+        [UnityTest]
+        public IEnumerator SizeTest() {
+            var size = new Vector2(100, 50);
 
-            "Hello, Flutterive!".ToState().Out(out State<string> textState);
+            "Hello".TextWidget().PositionedWidget(
+                key: "k",
+                anchor: Anchor.Pinned(
+                    lrtb: LRTB.Rect(
+                        size: size)))
+            .RootWidget(cam: cam).Build();
 
-            new Root(
-                new RootParam {
-                    canvasParam = new RootParam.CanvasParam {
-                        camera = cam,
-                        planeDistance = 1f,
-                        sortingOrder = 0
-                    },
-                    child = textState.Text(key: "text").Margin(edge: 20.EdgeAll()).ToState(),
-                }
-            ).Build(null).gameObject.Out(out GameObject go);
+            var w = keys.KeyedWidgets["k"];
+            var rectTransform = w.Obj.GetComponent<RectTransform>();
+            var actualSize = rectTransform.sizeDelta;
+            Selection.activeGameObject = rectTransform.gameObject;
 
-            PrefabUtility.SaveAsPrefabAssetAndConnect(
-                go,
-                "Assets/Editor/FlutteriveTests_SampleTest.prefab",
-                InteractionMode.UserAction
-            );
+            yield return new WaitForSeconds(5f);
+            Assert.That(w, Is.TypeOf<Positioned>());
+            Assert.That(actualSize, Is.EqualTo(size));
 
-            Assert.Pass();
             yield break;
         }
     }

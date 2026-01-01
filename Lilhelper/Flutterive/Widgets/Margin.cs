@@ -30,7 +30,7 @@ namespace Lilhelper.Flutterive.Widgets {
     /// 實作上建立一個外層容器作為 Layout 的一員，並在其下建立內層容器 (inner)
     ///，再將子 Widget 建立在內層容器上，透過設定 `offsetMin` / `offsetMax` 實現 margin。
     /// </summary>
-    public class Margin : IWidget {
+    public class Margin : WidgetBase {
         public readonly MarginParam param;
         private GameObject self;
 
@@ -38,34 +38,28 @@ namespace Lilhelper.Flutterive.Widgets {
             this.param = param;
         }
 
-        public RectTransform Build(RectTransform parent) {
+        public override RectTransform Build(RectTransform parent) {
             new GameObject(nameof(Margin))
                 .Out(out self)
-                .SetUpLayout(parent, out RectTransform rectTransform, out VerticalLayoutGroup layoutGroup)
+                .AssignKey(this, param.key)
+                .SetRectTransform(out RectTransform rectTransform, parent)
+                .SetVerticalLayoutGroup(out VerticalLayoutGroup group)
+                .SetContentSizeFitter()
                 ;
 
             param.edge.ActListenOfHost(edge => {
-                layoutGroup.padding.left = edge.left;
-                layoutGroup.padding.right = edge.right;
-                layoutGroup.padding.top = edge.top;
-                layoutGroup.padding.bottom = edge.bottom;
+                group.padding.left = edge.left;
+                group.padding.right = edge.right;
+                group.padding.top = edge.top;
+                group.padding.bottom = edge.bottom;
             }, host: self);
 
-            // 當 child 改變時，銷毀舊 child 並建立新的 child 在 innerRect
             param.child?.ActListenOfHost(newValue => {
                 param.child.Value?.Kill();
                 newValue?.Build(rectTransform);
             }, host: self);
 
             return rectTransform;
-        }
-
-        public bool Kill() {
-            if (self.DoExists()) {
-                Object.Destroy(self);
-                return true;
-            }
-            return false;
         }
     }
 }
