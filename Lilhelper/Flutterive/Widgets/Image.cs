@@ -9,9 +9,9 @@ namespace Lilhelper.Flutterive.Widgets {
 
     }
 
-    public class SlidedImage : IImageType {
+    public class SlicedImage : IImageType {
         public bool fillCenter { get; private set; } = true;
-        public SlidedImage(bool fillCenter = true) {
+        public SlicedImage(bool fillCenter = true) {
             this.fillCenter = fillCenter;
         }
     }
@@ -45,7 +45,6 @@ namespace Lilhelper.Flutterive.Widgets {
     public struct ImageParam {
         public string key;
         public State<Rendering> rendering;
-        public State<ISizing> sizing;
         public State<IImageType> imageType;
         public State<IWidget> child;
     }
@@ -63,8 +62,8 @@ namespace Lilhelper.Flutterive.Widgets {
                 .Out(out self)
                 .AssignKey(this, param.key)
                 .SetRectTransform(out RectTransform rectTransform, parent)
-                .SetSizing(param.sizing)
-                .SetVerticalLayoutGroup()
+                .InheritSize()
+                // .SetVerticalLayoutGroup()
                 .AddCompAct<UnityEngine.UI.Image>(it => {
                     param.rendering?.ActListenOfHost(newValue => {
                         it.sprite = newValue.data;
@@ -75,7 +74,7 @@ namespace Lilhelper.Flutterive.Widgets {
 
                     param.imageType?.ActListenOfHost(newValue => {
                         switch (newValue) {
-                            case SlidedImage slidedImage:
+                            case SlicedImage slidedImage:
                                 it.type = UnityEngine.UI.Image.Type.Sliced;
                                 it.fillCenter = slidedImage.fillCenter;
                                 break;
@@ -103,7 +102,6 @@ namespace Lilhelper.Flutterive.Widgets {
             string key = null,
             State<Rendering> rendering = null,
             State<IImageType> imageType = null,
-            State<ISizing> sizing = null,
             State<IWidget> child = null
         ) {
             if (rendering == null) {
@@ -120,7 +118,6 @@ namespace Lilhelper.Flutterive.Widgets {
             return new Image(new ImageParam {
                 key = key,
                 rendering = rendering,
-                sizing = sizing,
                 imageType = imageType ?? new SimpleImage(),
                 child = child
             });

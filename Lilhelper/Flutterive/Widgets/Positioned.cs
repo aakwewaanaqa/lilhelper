@@ -132,6 +132,14 @@ namespace Lilhelper.Flutterive.Widgets {
                 bottom = size.y,
             };
         }
+        public static LRTB Rect(float x, float y, float width, float height) {
+            return new LRTB {
+                left = x,
+                right = width,
+                top = y,
+                bottom = height,
+            };
+        }
         public static LRTB Rect(Rect rect) {
             return new LRTB {
                 left = rect.x,
@@ -223,7 +231,7 @@ namespace Lilhelper.Flutterive.Widgets {
                 .Out(out self)
                 .AssignKey(this, param.key)
                 .SetRectTransform(out RectTransform rectTransform, parent)
-                .SetVerticalLayoutGroup()
+                // .SetVerticalLayoutGroup()
                 ;
 
             param.anchor?.ActListenOfHost(newValue => {
@@ -240,7 +248,7 @@ namespace Lilhelper.Flutterive.Widgets {
     }
 
     public static class PositionedExt {
-        public static Positioned PositionedWidget(
+        public static Positioned Positioned(
             this IWidget child,
             string key = null,
             State<Anchor> anchor = null) {

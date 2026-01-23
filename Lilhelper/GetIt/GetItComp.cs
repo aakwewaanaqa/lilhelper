@@ -28,7 +28,7 @@ namespace Lilhelper.GetIt {
             public object cachedInstance;
         }
 
-        private List<FactoryKvp> factories = new List<FactoryKvp>();
+        private readonly List<FactoryKvp> factories = new();
 
         private void Awake() {
             UnityEngine.SceneManagement.SceneManager.activeSceneChanged += OnSceneChanged;

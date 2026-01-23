@@ -25,8 +25,8 @@ namespace Lilhelper.Flutterive.Widgets {
                 .Out(out self)
                 .AssignKey(this, param.key)
                 .SetRectTransform(out RectTransform rectTransform, parent)
-                .SetVerticalLayoutGroup()
-                .SetContentSizeFitter()
+                // .SetVerticalLayoutGroup()
+                .InheritSize()
                 .AddCompAct<TextMeshProUGUI>(it => {
                     param.data?.ActListenOfHost(newValue => {
                         it.text = newValue;

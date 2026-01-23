@@ -54,7 +54,7 @@ namespace Lilhelper.Flutterive.Widgets {
                 .Out(out self)
                 .AssignKey(this, param.key)
                 .SetRectTransform(out RectTransform rectTransform, parent)
-                .SetVerticalLayoutGroup()
+                // .SetVerticalLayoutGroup()
                 .AddCompAct<Canvas>(it => {
                     // 監聽 Canvas 參數變更，根據是否提供 camera 決定使用 Camera 模式或 Overlay 模式
                     param.canvasParam.ActListenOfHost(val => {
@@ -91,7 +91,7 @@ namespace Lilhelper.Flutterive.Widgets {
         /// </summary>
         /// <param name="child">子 Widget</param>
         /// <param name="block">Canvas 參數的可觀察狀態</param>
-        public static Root RootWidget(
+        public static Root Root(
             this IWidget child,
             Camera cam = null,
             State<RootParam.CanvasBlock> block = null) {

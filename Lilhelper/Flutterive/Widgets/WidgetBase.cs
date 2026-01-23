@@ -100,10 +100,15 @@ namespace Lilhelper.Flutterive.Widgets {
                 });
         }
 
+        internal static GameObject InheritSize(this GameObject self) {
+            self.GetCompAct<RectTransform>(it => it.SetAnchor(anchor: Anchor.Expand()));
+            return self;
+        }
+
         internal static GameObject SetSizing(
             this GameObject self,
             State<ISizing> sizing = null) {
-            sizing ??= new FitContent();
+            sizing ??= new Inherit();
             sizing.ActListenOfHost(newValue => {
                 switch (newValue) {
                     default:

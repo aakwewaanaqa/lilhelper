@@ -50,12 +50,12 @@ namespace Lilhelper.Tests {
         public IEnumerator SizeTest() {
             var size = new Vector2(100, 50);
 
-            "Hello".TextWidget().PositionedWidget(
+            "Hello".TextWidget().Positioned(
                 key: "k",
                 anchor: Anchor.Pinned(
                     lrtb: LRTB.Rect(
                         size: size)))
-            .RootWidget(cam: cam).Build();
+            .Root(cam: cam).Build();
 
             var w = keys.KeyedWidgets["k"];
             var rectTransform = w.Obj.GetComponent<RectTransform>();
